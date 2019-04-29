@@ -1,5 +1,5 @@
 const axios = require("axios");
-const referenceManifest = require("./referenceManifest");
+const referenceManifest = require("./referenceManifest.json");
 const IPFS = require("ipfs-mini");
 const ipfs = new IPFS({
   host: "ipfs.infura.io",
@@ -32,7 +32,10 @@ async function generateCoreManifest(dnpsTags) {
   const manifest = {
     ...referenceManifest,
     version: "0.2.0",
-    dependencies
+    dependencies: {
+      ...referenceManifest.dependencies,
+      ...dependencies
+    }
   };
 
   const hash = await ipfs.add(JSON.stringify(manifest, null, 2));
