@@ -3,7 +3,7 @@ const generateCoreManifest = require("./generateCoreManifest");
 generateCoreManifest({
   "bind.dnp.dappnode.eth": "v0.2.0",
   "ipfs.dnp.dappnode.eth": "v0.2.0",
-  "ethchain.dnp.dappnode.eth": "v0.1.15",
+  "ethchain.dnp.dappnode.eth": "v0.2.0",
   "ethforward.dnp.dappnode.eth": "v0.2.0",
   "vpn.dnp.dappnode.eth": "v0.2.0",
   "wamp.dnp.dappnode.eth": "v0.2.0",

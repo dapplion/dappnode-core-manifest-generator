@@ -41,5 +41,9 @@
     "admin.dnp.dappnode.eth": "/ipfs/Qmdc2ZTGGB179pgaw3MsyndBGy72wgkL9GHV15nzKHkFts",
     "dappmanager.dnp.dappnode.eth": "/ipfs/QmUMdjfz9nRhPRjnaKXsC24XuwQvtDF8Uv2taKbCC3PzCE",
     "wifi.dnp.dappnode.eth": "/ipfs/QmdyfXWSaWbVNt1Gn6XVHkrJeKK9XPvQvTcTWwGUdG9nPU"
+  },
+  "changelog": "**IMPORTANT!** This is a major update to OpenVPN: This update breaks compatibility with the last VPN version. Please read the migration guide at: https://migration020.dappnode.io",
+  "warnings": {
+    "onInstall": "NOTE that the bottom right message updating the progress of the installation will never resolve. After the update you can still connect via WIFI if you have a physical DAppNode, and get your new VPN credentials from the devices section."
   }
 }
