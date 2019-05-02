@@ -1,46 +1,44 @@
-const axios = require("axios");
+const ipfs = require("./ipfs");
+const getGithubAsset = require("./getGithubAsset");
 const referenceManifest = require("./referenceManifest.json");
-const IPFS = require("ipfs-mini");
-const ipfs = new IPFS({
-  host: "ipfs.infura.io",
-  port: 5001,
-  protocol: "https"
-});
 
 async function generateCoreManifest(dnpsTags) {
   const dependencies = {};
   try {
+    // Fetch manifest from github to get the latest image hash
+    const coreManifest = await getGithubAsset({
+      dnp: "core",
+      tag: "v0.2.0",
+      fileName: "dappnode_package.json"
+    });
+
     await Promise.all(
       Object.entries(dnpsTags).map(async ([dnp, tag]) => {
-        const githubName = "DNP_" + dnp.split(".")[0].toUpperCase();
-        const url = `https://github.com/dappnode/${githubName}/releases/download/${tag}/upload.json`;
-        const res = await axios.get(url).catch(e => {
-          if (e.response.status === 404)
-            throw Error(`${githubName} tag ${tag} is not available`);
-          else throw e;
+        const data = await getGithubAsset({
+          dnp,
+          tag,
+          fileName: "upload.json"
         });
-        console.log(`Fetched ${githubName}`);
+        console.log(`Fetched ${dnp}: /ipfs/${data.hash}`);
         // res.data.hash = "Qmacb3b32j34..."
-        dependencies[dnp] = `/ipfs/${res.data.hash}`;
+        dependencies[dnp] = `/ipfs/${data.hash}`;
       })
     );
+
+    const manifest = {
+      ...coreManifest,
+      version: "0.2.0",
+      dependencies: {
+        ...coreManifest.dependencies,
+        ...dependencies
+      }
+    };
+
+    return await ipfs.addObj(manifest);
   } catch (e) {
     console.error(e);
     process.exit(1);
   }
-
-  const manifest = {
-    ...referenceManifest,
-    version: "0.2.0",
-    dependencies: {
-      ...referenceManifest.dependencies,
-      ...dependencies
-    }
-  };
-
-  const hash = await ipfs.add(JSON.stringify(manifest, null, 2));
-
-  return hash;
 }
 
 module.exports = generateCoreManifest;
